@@ -1,0 +1,9 @@
+{
+  "name": "book-tracker-contract",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "build:contract": "./build.sh",
+    "test": "cargo test -- --nocapture --color always"
+  }
+}
