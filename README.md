@@ -10,10 +10,21 @@ $ yarn build:contract
 $ near dev-deploy
 ```
 
-# Functions
+# Call Functions
 
 ## Add book
 
+### Book interface
+```
+pub struct Book {
+    title: String,
+    description: String,
+    status: Status,
+    image: String,
+}
+```
+
+## Add book call function
 ```
 add_book '{"book":{"description":"Tutorial for mechanics","image":"https://example.com","title":"Motorcycle Mechanics 101","status":"List"}}'
 
@@ -31,6 +42,8 @@ update_book '{"book_id":"1", "status":"Read"}'
 ```
 delete_book '{"book_id":"1"}'
 ```
+
+# View methods
 
 ## Get book
 
