@@ -3,6 +3,7 @@ use near_sdk::collections::{UnorderedMap, UnorderedSet};
 use near_sdk::json_types::ValidAccountId;
 use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{env, near_bindgen, setup_alloc, AccountId, BorshStorageKey};
+use std::cmp;
 
 setup_alloc!();
 
@@ -124,11 +125,9 @@ impl Contract {
         let limit = limit.map(|v| v as usize).unwrap_or(usize::MAX);
         assert_ne!(limit, 0, "Cannot provide limit of 0.");
 
+
         if account_id.is_none() {
-            assert!(
-                self.books.len() > skip,
-                "Out of bounds, please use a smaller skip."
-            );
+            let skip = cmp::min(self.books.len(), skip);
 
             return Some(
                 self.books
@@ -140,15 +139,12 @@ impl Contract {
             );
         }
 
-        let book_ids = self
+        let book_ids: UnorderedSet<BookId> = self
             .books_by_owner_id
             .get(&account_id.unwrap().to_string())
-            .expect("No books are found");
+            .unwrap_or(UnorderedSet::new("".as_bytes()));
 
-        assert!(
-            book_ids.len() > skip,
-            "Out of bounds, please use a smaller skip."
-        );
+        let skip = cmp::min(self.books.len(), skip);
 
         return book_ids
             .iter()
